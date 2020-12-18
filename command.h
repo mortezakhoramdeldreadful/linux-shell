@@ -1,44 +1,32 @@
 //
-// Created by mrhb on 12/11/20.
+// Created by morteza on 18.12.20.
 //
 
 #ifndef SHELL_READLINE_H
 #define SHELL_READLINE_H
-#define SINGLE_LINE_COMMAND 1
-#define PIPE_LINE_COMMAND 2
+#define ONE_LINE_COMMAND 1
+#define MULTI_LINE_COMMAND 2
 #define QUIT 3
-#define UNKNOWN_COMMAND 4
-#define SEND_MSG 5
+#define INCORRECT_COMMAND 4
+#define MESSAGE 5
 #endif
-#include <cstring>
-#include "stringUtils.h"
 
-char *readCommand() {
-    printf("\nmrhb_shell>>");
-    char *line = NULL;
-    ssize_t bufSize = 0;
-    if (getline(&line, reinterpret_cast<size_t *>(&bufSize), stdin)==-1){
-        printf("\nGOOD BYE !!\n");
+#include <cstring>
+#include <cstdio>
+#include "utils/remove_string.h"
+#include "utils/count_substring.h"
+#include "utils/contain.h"
+
+#define MAX 1000
+
+char *read_each_command() {
+    printf("\nmorteza@morteza-Lenovo-ideapad-510-15IKB:~$");
+    char line[MAX];
+    if (fgets(reinterpret_cast<char *>(&line), MAX, stdin) == nullptr) {
         exit(0);
     }
-    line = strRemove(line, reinterpret_cast<const char *>("\n"));
-
-    return line;
-}
-
-int getCommandType(char *command){
-    if (contain(command,"msg")){
-        return SEND_MSG;
-    }else if (contain(command,"|")){
-        if (countOfSubSting(command,"|")!=1){
-            return UNKNOWN_COMMAND;
-        }
-        return PIPE_LINE_COMMAND;
-    }else if (contain(command,"quit")){
-        return QUIT;
-    }else {
-        return SINGLE_LINE_COMMAND;
-    }
+    char *line_ptr = remove(line, reinterpret_cast<const char *>("\n"));
+    return line_ptr;
 }
 
 
